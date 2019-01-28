@@ -1,0 +1,21 @@
+{
+    "name": "fulibYamlTS",
+    "version": "1.0.0",
+    "description": "Typescript implementation of the fulib yamler",
+    "author": "Sebastian Copei <seb@uni-kassel.de>",
+    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/fujaba/fulibYamlTS"
+    },
+    "scripts": {
+        "build": "tsc && tslint -c tslint.json -p tsconfig.json"
+    },
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts",
+    "dependencies": {},
+    "devDependencies": {
+        "tslint": "^5.12.1",
+        "typescript": "^3.2.4"
+    }
+}

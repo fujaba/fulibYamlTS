@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "allowJs": false,
+      "declaration": true,
+      "outDir": "lib",
+      "strict": true,
+      "noImplicitAny": false,
+      "strictNullChecks": true,
+      "alwaysStrict": true,
+      "moduleResolution": "node",
+      "baseUrl": ".",
+      "typeRoots": ["node_modules/@types"]
+    }
+  }
+  
