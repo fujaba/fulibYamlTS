@@ -1,33 +1,33 @@
 {
-    "extends": "tslint:latest",
-    "rules": {
-      "interface-name": [true, "never-prefix"],
-      "max-line-length": [false],
-      "member-ordering": [
-        true,
-        {
-          "order": [
-            "static-field",
-            "instance-field",
-            "constructor",
-            "public-instance-method",
-            "protected-instance-method",
-            "private-instance-method"
-          ]
-        }
-      ],
-      "no-duplicate-variable": true,
-      "no-empty": false,
-      "object-literal-sort-keys": false,
-      "one-line": [
-        true,
-        "check-open-brace",
-        "check-catch",
-        "check-whitespace"
-      ],
-      "ordered-imports": [false],
-      "quotemark": [true, "single", "avoid-escape"],
-      "semicolon": [true, "always", "ignore-bound-class-methods"]
-    }
+  "extends": "tslint:latest",
+  "rules": {
+    "interface-name": [true, "never-prefix"],
+    "max-line-length": [false],
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "static-field",
+          "instance-field",
+          "constructor",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method"
+        ]
+      }
+    ],
+    "no-duplicate-variable": true,
+    "no-empty": false,
+    "object-literal-sort-keys": false,
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-catch",
+      "check-whitespace"
+    ],
+    "ordered-imports": [false],
+    "quotemark": [true, "single", "avoid-escape"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "no-console": false
   }
-  
+}
