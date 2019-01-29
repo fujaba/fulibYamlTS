@@ -15,12 +15,9 @@ jobs:
       script:
         - yarn install
         - yarn build
-      before_deploy:
-        - sudo cp package.json README.md /lib/
-        - cd lib
       deploy:
         provider: npm
-        email: "sco@uni-kassel.de"
+        email: "$NPM_EMAIL"
         api_key: "$NPM_TOKEN"
         skip_cleanup: true
         on:
