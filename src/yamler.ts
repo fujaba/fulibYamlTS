@@ -66,6 +66,14 @@ export default class Yamler {
     return result;
   }
 
+  public static encapsulate(value: string): string {
+    if (value.match(/[a-zA-Z0-9_\\.]+/)) {
+      return value;
+    }
+    value = value.replace(/\"/g, '\\\\\"');
+    return `"${value}"`;
+  }
+
   private nextToken(): string {
     this.currentToken = this.lookAheadToken;
     this.currentPos = this.lookAheadPos;
