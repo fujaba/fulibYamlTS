@@ -1,9 +1,9 @@
 !/lib
 /src
-/test
+/tests
 
 .gitignore
 .npmignore
 .travis.yml
-.tslint.json
+tslint.json
 yarn.lock
