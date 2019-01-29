@@ -1,5 +1,5 @@
 {
-  "name": "@fujaba/fulibYamlTS",
+  "name": "@fujaba/fulib-yaml-ts",
   "version": "1.0.0",
   "description": "Typescript implementation of the fulib yamler",
   "author": "Sebastian Copei <seb@uni-kassel.de>",
