@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+  - "8"
+
+cache: yarn
+
+install: yarn
+script: 
+  - yarn test
+
+jobs:
+  include:
+    - stage: npm release
+      node_js: 8
+      script:
+        - yarn install
+        - yarn build
+      before_deploy:
+        - cd lib
+      deploy:
+        provide: npm
+        email: "sco@uni-kassel.de"
+        api_key: "$NPM_TOKEN"
+        skip_cleanup: true
+        on:
+          branch: master
+      
