@@ -16,6 +16,7 @@ jobs:
         - yarn install
         - yarn build
       before_deploy:
+        - cp package.json README.md /lib/
         - cd lib
       deploy:
         provider: npm
