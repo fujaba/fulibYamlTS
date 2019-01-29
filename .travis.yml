@@ -18,7 +18,7 @@ jobs:
       before_deploy:
         - cd lib
       deploy:
-        provide: npm
+        provider: npm
         email: "sco@uni-kassel.de"
         api_key: "$NPM_TOKEN"
         skip_cleanup: true
