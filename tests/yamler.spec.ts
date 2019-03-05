@@ -41,7 +41,7 @@ describe('Yamler', () => {
     expect(map.get('newValue')).toBe('Abu Aba');
   });
 
-  it('should parse a list with key value pairs and references', async () => {
+  it('should parse a list with key value pairs and references', () => {
     const yaml: string =
       '- sr: .Map\n' +
       '  clazz: Uni\n' +
@@ -56,7 +56,7 @@ describe('Yamler', () => {
       '  name: wa4242\n' +
       '  uni: sr\n';
 
-    let idMap: YamlIdMap = new YamlIdMap(['']);
+    let idMap: YamlIdMap = new YamlIdMap();
     const yamlObj: YamlObject = idMap.decode(yaml);
 
     const map = yamlObj.map;
@@ -65,8 +65,8 @@ describe('Yamler', () => {
     const rooms: any[] = map.get('rooms') as any[];
     expect(rooms.length).toBe(2);
 
-    const dumpMap: YamlIdMap = new YamlIdMap(['']);
-    const list: any[] = await dumpMap.collectObjects([yamlObj]);
+    const dumpMap: YamlIdMap = new YamlIdMap();
+    const list: any[] = dumpMap.collectObjects([yamlObj]);
     expect(list.length).toBe(3);
 
     const uni: Uni = new Uni();
@@ -82,8 +82,8 @@ describe('Yamler', () => {
     room2.uni = uni;
     uni.rooms.push(room1, room2);
 
-    idMap = new YamlIdMap(['tests/model']);
-    const encodedYaml: string = await idMap.encode([uni]);
+    idMap = new YamlIdMap();
+    const encodedYaml: string = idMap.encode([uni]);
     expect(encodedYaml).toContain('- sr1: \tUni');
     expect(encodedYaml).toContain('- r22: \tRoom');
     expect(encodedYaml).toContain('- r13: \tRoom');

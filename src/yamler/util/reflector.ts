@@ -1,9 +1,9 @@
 export class Reflector {
-  private _className: string;
+  private _clazz: any;
   private _properties: string[];
 
   constructor() {
-    this._className = '';
+    this._clazz = null;
     this._properties = new Array<string>();
   }
 
@@ -14,34 +14,25 @@ export class Reflector {
     }
   }
 
-  public async getProperties(): Promise<string[]> {
+  public getProperties(): string[] {
     if (this._properties.length > 0) {
       return this._properties;
     }
 
-    try {
-      const clazz = await import(this._className);
-      const fieldNames: string[] = new Array();
-      for (const field of Reflect.ownKeys(clazz.default.prototype)) {
-        if (typeof field === 'string' && field !== 'constructor') {
-          fieldNames.push(field);
-        }
+    const fieldNames: string[] = new Array();
+    for (const field of Reflect.ownKeys(this._clazz)) {
+      if (typeof field === 'string' && field !== 'constructor') {
+        fieldNames.push(field);
       }
-
-      this._properties = fieldNames.sort();
-      return this._properties;
-
-    } catch (error) {
-      console.error(error);
     }
 
-    return [];
+    this._properties = fieldNames.sort();
+    return this._properties;
   }
 
   public newInstance(): any {
-    const clazz: any = require(this.className);
-    if (clazz) {
-      return Reflect.construct(clazz, []);
+    if (this._clazz) {
+      return Reflect.construct(this._clazz, []);
     }
     return null;
   }
@@ -70,11 +61,11 @@ export class Reflector {
     return null;
   }
 
-  set className(className: string) {
-    this._className = className;
+  set clazz(clazz: any) {
+    this._clazz = clazz;
   }
 
-  get className(): string {
-    return this._className;
+  get clazz(): any {
+    return this._clazz;
   }
 }

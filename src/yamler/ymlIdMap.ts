@@ -9,24 +9,19 @@ export class YamlIdMap {
   private _idObjMap: Map<any, string>;
   private _maxUsedIdNum: number;
   private _objIdMap: Map<string, any>;
-  private _packageNames: string[];
   private _reflectorMap: ReflectorMap;
   private _userId: string;
   private _yaml: string;
   private _yamler: Yamler;
   private _yamlChangeText: string;
 
-  constructor(packageNames: string[]) {
-    if (!packageNames || packageNames.length === 0) {
-      throw new Error('Missing package names');
-    }
-    this._packageNames = packageNames;
+  constructor() {
     this._attrTimeStamps = new Map();
     this._decodingPropertyChange = false;
     this._idObjMap = new Map();
     this._maxUsedIdNum = 0;
     this._objIdMap = new Map();
-    this._reflectorMap = new ReflectorMap(this._packageNames);
+    this._reflectorMap = new ReflectorMap();
     this._userId = '';
     this._yaml = '';
     this._yamler = new Yamler();
@@ -56,72 +51,66 @@ export class YamlIdMap {
     return root;
   }
 
-  public async encode(rootObjList: any[]): Promise<string> {
+  public encode(rootObjList: any[]): string {
     if (!rootObjList || rootObjList.length === 0) {
       throw new Error('Missing package names');
     }
     let result: string = '';
-    await this.collectObjects(rootObjList);
+    this.collectObjects(rootObjList);
 
-    const iterate = async () => {
-      await this.asyncForEach(Array.from(this._objIdMap.entries()), async (entry: any) => {
-        const key: string = entry[0];
-        const obj: any = entry[1];
-        const className = obj.constructor.name;
-        result += `- ${key}: \t${className}\n`;
-
-        // attrs
-        const creator: YamlObjectReflector | Reflector | null = await this._reflectorMap.getReflector('', obj);
-        if (creator) {
-          for (const prop of await creator.getProperties()) {
-            if (prop.startsWith('.')) {
+    this._objIdMap.forEach((obj: any, key: string) => {
+      const className = obj.constructor.name;
+      result += `- ${key}: \t${className}\n`;
+     // attrs
+      const creator: YamlObjectReflector | Reflector | null = this._reflectorMap.getReflector('', obj);
+      if (creator) {
+        for (const prop of creator.getProperties()) {
+          if (prop.startsWith('.')) {
+            continue;
+          }
+          let value: any = creator.getValue(obj, prop);
+          if (!value) {
+            continue;
+          }
+          if (value instanceof Array) {
+            if (value.length === 0) {
               continue;
             }
-            let value: any = creator.getValue(obj, prop);
-            if (!value) {
-              continue;
-            }
-            if (value instanceof Array) {
-              if (value.length === 0) {
-                continue;
-              }
-              result += `  ${prop}: \t`;
-              for (const valueObj of value) {
-                const valueKey: string | undefined = this._idObjMap.get(valueObj);
-                if (valueKey) {
-                  result += `${valueKey}\t`;
-                }
-              }
-              result += '\n';
-            } else {
-              const valueKey: string | undefined = this._idObjMap.get(value);
+            result += `  ${prop}: \t`;
+            for (const valueObj of value) {
+              const valueKey: string | undefined = this._idObjMap.get(valueObj);
               if (valueKey) {
-                result += `  ${prop}: \t${valueKey}\n`;
-              } else {
-                if (typeof value === 'string') {
-                  value = Yamler.encapsulate(value);
-                }
-                result += `  ${prop}: \t${value}\n`;
+                result += `${valueKey}\t`;
               }
-                 // add timestamp?
-              if (this._userId !== '') {
-                const timeKey: string = `${key}.${prop}`;
-                const timeStamp: string | undefined = this._attrTimeStamps.get(timeKey);
-                if (timeStamp) {
-                  result += `  ${prop}.time: \t${timeStamp}\n`;
-                }
+            }
+            result += '\n';
+          } else {
+            const valueKey: string | undefined = this._idObjMap.get(value);
+            if (valueKey) {
+              result += `  ${prop}: \t${valueKey}\n`;
+            } else {
+              if (typeof value === 'string') {
+                value = Yamler.encapsulate(value);
+              }
+              result += `  ${prop}: \t${value}\n`;
+            }
+               // add timestamp?
+            if (this._userId !== '') {
+              const timeKey: string = `${key}.${prop}`;
+              const timeStamp: string | undefined = this._attrTimeStamps.get(timeKey);
+              if (timeStamp) {
+                result += `  ${prop}.time: \t${timeStamp}\n`;
               }
             }
           }
-          result += '\n';
         }
-      });
-      return result;
-    };
-    return iterate();
+        result += '\n';
+      }
+    });
+    return result;
   }
 
-  public async collectObjects(rootObjList: any[]): Promise<any[]> {
+  public collectObjects(rootObjList: any[]): any[] {
     const simpleList: any[] = new Array();
     const collectedObjects: any[] = new Array();
     simpleList.push(...rootObjList);
@@ -139,9 +128,9 @@ export class YamlIdMap {
         key = this.addToObjIdMap(obj);
 
         // find neighbors
-        const reflector: YamlObjectReflector | Reflector | null = await this._reflectorMap.getReflector('', obj);
+        const reflector: YamlObjectReflector | Reflector | null = this._reflectorMap.getReflector('', obj);
         if (reflector) {
-          for (const prop of await reflector.getProperties()) {
+          for (const prop of reflector.getProperties()) {
             const value: any = reflector.getValue(obj, prop);
             if (!value) {
               continue;
@@ -500,17 +489,5 @@ export class YamlIdMap {
     this._idObjMap.set(obj, key);
 
     return key;
-  }
-
-  /**
-   * A little trick to handle asynchronous iteration over an array
-   *
-   * @param array The array to iterate over
-   * @param callback A function which receives asynchronously the array elements
-   */
-  private async asyncForEach(array: any[], callback): Promise<void> {
-    for (const entry of array) {
-      await callback(entry);
-    }
   }
 }

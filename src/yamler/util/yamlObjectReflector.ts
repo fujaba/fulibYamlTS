@@ -14,7 +14,7 @@ export class YamlObjectReflector extends Reflector {
     super.removeObject(object);
   }
 
-  public async getProperties(): Promise<any[]> {
+  public getProperties(): any[] {
     return Array.from(this._yamlObject.map.keys());
   }
 
