@@ -1,4 +1,7 @@
-import Yamler from '../src/yamler';
+import Uni from './model/uni';
+import Room from './model/room';
+import { Yamler, YamlIdMap } from '../src';
+import { YamlObject } from '../src/yamler/util';
 
 describe('Yamler', () => {
   const yamler: Yamler = new Yamler();
@@ -36,5 +39,53 @@ describe('Yamler', () => {
 
     const map: Map<string, string> = list[1];
     expect(map.get('newValue')).toBe('Abu Aba');
+  });
+
+  it('should parse a list with key value pairs and references', async () => {
+    const yaml: string =
+      '- sr: .Map\n' +
+      '  clazz: Uni\n' +
+      '  name: Study Right\n' +
+      '  rooms: r1 r2\n' +
+      '- r1: .Map\n' +
+      '  clazz: Room\n' +
+      '  name: wa1337\n' +
+      '  uni: sr\n' +
+      '- r2: .Map\n' +
+      '  clazz: Room\n' +
+      '  name: wa4242\n' +
+      '  uni: sr\n';
+
+    let idMap: YamlIdMap = new YamlIdMap(['']);
+    const yamlObj: YamlObject = idMap.decode(yaml);
+
+    const map = yamlObj.map;
+    expect(map.get('clazz')).toBe('Uni');
+
+    const rooms: any[] = map.get('rooms') as any[];
+    expect(rooms.length).toBe(2);
+
+    const dumpMap: YamlIdMap = new YamlIdMap(['']);
+    const list: any[] = await dumpMap.collectObjects([yamlObj]);
+    expect(list.length).toBe(3);
+
+    const uni: Uni = new Uni();
+    uni.id = 'sr';
+    uni.name = 'Study Right';
+    const room1: Room = new Room();
+    room1.id = 'r1';
+    room1.name = 'wa1337';
+    room1.uni = uni;
+    const room2: Room = new Room();
+    room2.id = 'r2';
+    room2.name = 'wa4242';
+    room2.uni = uni;
+    uni.rooms.push(room1, room2);
+
+    idMap = new YamlIdMap(['tests/model']);
+    const encodedYaml: string = await idMap.encode([uni]);
+    expect(encodedYaml).toContain('- sr1: \tUni');
+    expect(encodedYaml).toContain('- r22: \tRoom');
+    expect(encodedYaml).toContain('- r13: \tRoom');
   });
 });

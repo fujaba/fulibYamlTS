@@ -1,4 +1,4 @@
-export default class StringTokenizer {
+export class StringTokenizer {
   private tokens: string[];
   private currentToken: string;
   private currentIndex: number;

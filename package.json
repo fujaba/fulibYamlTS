@@ -1,6 +1,6 @@
 {
   "name": "@fujaba/fulib-yaml-ts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Typescript implementation of the fulib yamler",
   "author": "Sebastian Copei <seb@uni-kassel.de>",
   "license": "UNLICENSED",
@@ -12,9 +12,11 @@
     "build": "tsc && tslint -c tslint.json -p tsconfig.json",
     "test": "jest"
   },
-  "main": "./lib/yamler.js",
-  "types": "./lib/yamler.d.ts",
-  "dependencies": {},
+  "main": "./lib/src/index.js",
+  "types": "./lib/src/index.d.ts",
+  "dependencies": {
+    "@types/node": "^11.9.5"
+  },
   "devDependencies": {
     "@types/jest": "^23.3.9",
     "jest": "^23.6.0",
@@ -31,8 +33,12 @@
       "ts",
       "tsx",
       "js",
+      "jsx",
       "json"
     ],
+    "moduleNameMapper": {
+      "tests/(.*)": "<rootDir>/tests/$1"
+    },
     "testEnvironment": "node"
   },
   "publishConfig": {

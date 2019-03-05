@@ -28,6 +28,7 @@
     "ordered-imports": [false],
     "quotemark": [true, "single", "avoid-escape"],
     "semicolon": [true, "always", "ignore-bound-class-methods"],
-    "no-console": false
+    "no-console": false,
+    "variable-name": [true, "check-format", "allow-leading-underscore"]
   }
 }
