@@ -490,4 +490,8 @@ export class YamlIdMap {
 
     return key;
   }
+
+  get objIdMap(): Map<string, any> {
+    return this._objIdMap;
+  }
 }
