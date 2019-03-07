@@ -495,6 +495,10 @@ export class YamlIdMap {
     return this._objIdMap;
   }
 
+  get idObjMap(): Map<any, string> {
+    return this._idObjMap;
+  }
+
   get reflectorMap(): ReflectorMap {
     return this._reflectorMap;
   }
