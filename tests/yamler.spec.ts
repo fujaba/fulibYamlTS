@@ -84,6 +84,7 @@ describe('Yamler', () => {
 
     idMap = new YamlIdMap();
     const encodedYaml: string = idMap.encode([uni]);
+    expect(encodedYaml).toContain('name: \t"Study Right"')
     expect(encodedYaml).toContain('- sr1: \tUni');
     expect(encodedYaml).toContain('- r22: \tRoom');
     expect(encodedYaml).toContain('- r13: \tRoom');
