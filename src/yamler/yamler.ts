@@ -66,7 +66,7 @@ export class Yamler {
   }
 
   public static encapsulate(value: string): string {
-    if (value.match(/[a-zA-Z0-9_\\.]+/)) {
+    if (value.match(/[a-zA-Z0-9_\\. \n\r\t]+/)) {
       return value;
     }
     value = value.replace(/\"/g, '\\\\\"');
