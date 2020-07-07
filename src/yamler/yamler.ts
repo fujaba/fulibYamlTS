@@ -45,9 +45,9 @@ export class Yamler {
     return result;
   }
 
-  public decodeList(yaml: string): Array<Map<string, string>> {
+  public decodeList(yaml: string): Map<string, string>[] {
     this.resetYamler(yaml);
-    const result: Array<Map<string, string>> = new Array();
+    const result: Map<string, string>[] = new Array();
 
     while (this._currentToken === '-') {
       const map: Map<string, string> = new Map();
