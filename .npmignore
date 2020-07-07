@@ -6,4 +6,4 @@
 .npmignore
 .travis.yml
 tslint.json
-yarn.lock
+package-lock.json

@@ -34,7 +34,7 @@ describe('Yamler', () => {
       '  newValue: m2\n' +
       '  newValueType: Member\n';
 
-    const list: Array<Map<string, string>> = yamler.decodeList(yaml);
+    const list: Map<string, string>[] = yamler.decodeList(yaml);
     expect(list.length).toBe(3);
 
     const map: Map<string, string> = list[1];
@@ -84,7 +84,7 @@ describe('Yamler', () => {
 
     idMap = new YamlIdMap();
     const encodedYaml: string = idMap.encode([uni]);
-    expect(encodedYaml).toContain('name: \t"Study Right"')
+    expect(encodedYaml).toContain('name: \t"Study Right"');
     expect(encodedYaml).toContain('- sr1: \tUni');
     expect(encodedYaml).toContain('- r22: \tRoom');
     expect(encodedYaml).toContain('- r13: \tRoom');
